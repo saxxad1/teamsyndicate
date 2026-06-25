@@ -44,7 +44,7 @@ const blankTransaction: TransactionForm = {
   date: today(),
   memberId: "",
   projectId: "",
-  paymentMethod: "Cash",
+  paymentMethod: "Bank",
   note: "",
 };
 
@@ -58,6 +58,7 @@ export default function TransactionsPage() {
     deleteTransaction,
   } = useStore();
   const [form, setForm] = useState<TransactionForm>(blankTransaction);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string>();
   const [deleteModalId, setDeleteModalId] = useState<string | null>(null);
   const [filters, setFilters] = useState({
@@ -105,6 +106,7 @@ export default function TransactionsPage() {
     }
 
     setEditingId(undefined);
+    setIsModalOpen(false);
     setForm(blankTransaction);
   }
 
@@ -117,9 +119,10 @@ export default function TransactionsPage() {
       date: transaction.date,
       memberId: transaction.memberId ?? "",
       projectId: transaction.projectId ?? "",
-      paymentMethod: transaction.paymentMethod ?? "Cash",
+      paymentMethod: transaction.paymentMethod ?? "Bank",
       note: transaction.note ?? "",
     });
+    setIsModalOpen(true);
   }
 
   return (
@@ -127,11 +130,41 @@ export default function TransactionsPage() {
       <PageHeader
         title="Transactions"
         description="All incoming and outgoing fund records with member, project, type, and date filters."
+        action={
+          isAdmin ? (
+            <IconButton
+              icon={Plus}
+              label="Add Transaction"
+              onClick={() => {
+                setEditingId(undefined);
+                setForm(blankTransaction);
+                setIsModalOpen(true);
+              }}
+            />
+          ) : undefined
+        }
       />
 
-      {isAdmin ? (
-        <Section title={editingId ? "Edit Transaction" : "Add Transaction"}>
-        <form className="grid gap-4 lg:grid-cols-6" onSubmit={submit}>
+      {isAdmin && isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/50 p-4">
+          <div className="w-full max-w-4xl rounded-xl bg-white shadow-xl">
+            <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+              <h2 className="text-lg font-semibold text-slate-900">
+                {editingId ? "Edit Transaction" : "Add Transaction"}
+              </h2>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setEditingId(undefined);
+                  setForm(blankTransaction);
+                }}
+                className="text-slate-400 hover:text-slate-600"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <form className="grid gap-4 p-6 lg:grid-cols-6" onSubmit={submit}>
           <SelectInput
             label="Type"
             value={form.type}
@@ -212,27 +245,27 @@ export default function TransactionsPage() {
               }
             />
           </div>
-          <div className="flex items-end gap-2 lg:col-span-2">
-            <IconButton
-              icon={editingId ? Save : Plus}
-              label={editingId ? "Save" : "Add"}
-              type="submit"
-            />
-            {editingId ? (
-              <IconButton
-                icon={X}
-                label="Cancel"
-                variant="secondary"
-                onClick={() => {
-                  setEditingId(undefined);
-                  setForm(blankTransaction);
-                }}
-              />
-            ) : null}
+                <div className="flex items-end justify-end gap-2 lg:col-span-6 mt-4 border-t border-slate-100 pt-6">
+                  <IconButton
+                    icon={X}
+                    label="Cancel"
+                    variant="ghost"
+                    onClick={() => {
+                      setIsModalOpen(false);
+                      setEditingId(undefined);
+                      setForm({...blankTransaction, paymentMethod: "Bank"});
+                    }}
+                  />
+                  <IconButton
+                    icon={editingId ? Edit3 : Plus}
+                    label={editingId ? "Save Changes" : "Add Transaction"}
+                    type="submit"
+                  />
+                </div>
+              </form>
+            </div>
           </div>
-        </form>
-      </Section>
-      ) : null}
+        )}
 
       <Section title="Filters">
         <div className="grid gap-4 md:grid-cols-5">
