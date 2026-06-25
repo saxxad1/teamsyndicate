@@ -412,7 +412,7 @@ export default function TransactionsPage() {
         </div>
 
         <TableShell className="hidden md:block">
-          <table className="w-full min-w-[1040px] text-left text-sm">
+          <table className="w-full min-w-[800px] text-left text-sm">
             <thead className="border-b border-slate-200 text-xs uppercase text-slate-500">
               <tr>
                 <th className="py-3 pr-3 font-medium">Date</th>

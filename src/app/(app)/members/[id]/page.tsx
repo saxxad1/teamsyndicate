@@ -453,7 +453,7 @@ export default function MemberDetailsPage() {
               </div>
 
               <TableShell className="hidden sm:block">
-                <table className="w-full min-w-[700px] text-left text-sm">
+                <table className="w-full min-w-[500px] text-left text-sm">
                   <thead className="border-b border-slate-200 text-xs uppercase text-slate-500">
                     <tr>
                       <th className="py-3 pr-3 font-medium">Month</th>
