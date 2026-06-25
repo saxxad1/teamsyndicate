@@ -54,18 +54,12 @@ export default function ReportsPage() {
         description="Collection, due, project profit/loss, total fund, and yearly report views."
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-3">
         <StatCard
           label="Fund balance"
           value={formatMoney(summary.totalFundBalance)}
           icon={Banknote}
           tone="emerald"
-        />
-        <StatCard
-          label="Total collected"
-          value={formatMoney(summary.totalCollected)}
-          icon={CircleDollarSign}
-          tone="sky"
         />
         <StatCard
           label="Total profit"
