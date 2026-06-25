@@ -802,7 +802,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
       await refreshData();
     },
-    [currentUser, isAdmin, refreshData, state.contributions, state.members, state.settings.monthlyContribution, supabase],
+    [currentUser, isAdmin, refreshData, state.contributions, state.settings.monthlyContribution, supabase],
   );
 
   const addProject = useCallback(

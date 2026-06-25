@@ -92,7 +92,148 @@ export default function ContributionDetailsPage() {
         {records.length === 0 ? (
           <EmptyState title="No records for this period." />
         ) : (
-          <TableShell>
+          <>
+            <div className="grid gap-3 sm:hidden">
+              {records.map((record) => (
+                <article
+                  key={record.id}
+                  className="rounded-lg border border-slate-200 bg-slate-50 p-3"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-slate-950">
+                        {memberName(state.members, record.memberId)}
+                      </h3>
+                      <p className="mt-1 text-sm text-slate-600">
+                        Expected {formatMoney(record.amount)}
+                      </p>
+                    </div>
+                    {isAdmin ? (
+                      <select
+                        defaultValue={record.status}
+                        onChange={(event) =>
+                          patch(record.id, {
+                            status: event.target.value as PaymentStatus,
+                          })
+                        }
+                        className="h-11 rounded-md border border-slate-300 bg-white px-3 text-base"
+                      >
+                        <option value="paid">Paid</option>
+                        <option value="partial">Partial</option>
+                        <option value="unpaid">Unpaid</option>
+                      </select>
+                    ) : (
+                      <Badge
+                        tone={
+                          record.status === "paid"
+                            ? "emerald"
+                            : record.status === "partial"
+                              ? "amber"
+                              : "rose"
+                        }
+                      >
+                        {record.status}
+                      </Badge>
+                    )}
+                  </div>
+
+                  <div className="mt-3 grid gap-3">
+                    <label className="block">
+                      <span className="text-sm font-medium text-slate-700">
+                        Paid amount
+                      </span>
+                      {isAdmin ? (
+                        <input
+                          type="number"
+                          defaultValue={record.paidAmount}
+                          min={0}
+                          max={record.amount}
+                          onBlur={(event) =>
+                            patch(record.id, {
+                              paidAmount: Number(event.target.value),
+                              status:
+                                Number(event.target.value) >= record.amount
+                                  ? "paid"
+                                  : Number(event.target.value) > 0
+                                    ? "partial"
+                                    : "unpaid",
+                            })
+                          }
+                          className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base"
+                        />
+                      ) : (
+                        <span className="mt-1 block font-medium">
+                          {formatMoney(record.paidAmount)}
+                        </span>
+                      )}
+                    </label>
+                    <label className="block">
+                      <span className="text-sm font-medium text-slate-700">
+                        Paid date
+                      </span>
+                      {isAdmin ? (
+                        <input
+                          type="date"
+                          defaultValue={record.paidDate}
+                          onBlur={(event) =>
+                            patch(record.id, { paidDate: event.target.value })
+                          }
+                          className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base"
+                        />
+                      ) : (
+                        <span className="mt-1 block">
+                          {record.paidDate || "-"}
+                        </span>
+                      )}
+                    </label>
+                    <label className="block">
+                      <span className="text-sm font-medium text-slate-700">
+                        Method
+                      </span>
+                      {isAdmin ? (
+                        <select
+                          defaultValue={record.paymentMethod ?? "Cash"}
+                          onChange={(event) =>
+                            patch(record.id, {
+                              paymentMethod: event.target.value as PaymentMethod,
+                            })
+                          }
+                          className="mt-1 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base"
+                        >
+                          {paymentMethods.map((method) => (
+                            <option key={method} value={method}>
+                              {method}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <span className="mt-1 block">
+                          {record.paymentMethod ?? "-"}
+                        </span>
+                      )}
+                    </label>
+                    <label className="block">
+                      <span className="text-sm font-medium text-slate-700">
+                        Note
+                      </span>
+                      {isAdmin ? (
+                        <input
+                          defaultValue={record.note}
+                          onBlur={(event) =>
+                            patch(record.id, { note: event.target.value })
+                          }
+                          className="mt-1 h-11 w-full rounded-md border border-slate-300 px-3 text-base"
+                        />
+                      ) : (
+                        <span className="mt-1 block">{record.note ?? "-"}</span>
+                      )}
+                    </label>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <TableShell className="hidden sm:block">
             <table className="w-full min-w-[1060px] text-left text-sm">
               <thead className="border-b border-slate-200 text-xs uppercase text-slate-500">
                 <tr>
@@ -223,7 +364,8 @@ export default function ContributionDetailsPage() {
                 ))}
               </tbody>
             </table>
-          </TableShell>
+            </TableShell>
+          </>
         )}
       </Section>
 

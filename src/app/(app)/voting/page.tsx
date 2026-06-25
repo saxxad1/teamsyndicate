@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Save, Trash2, X, Vote, Lock } from "lucide-react";
+import { Lock, Plus, Save, Vote, X } from "lucide-react";
 import { Badge, EmptyState, IconButton, PageHeader, Section, TextInput } from "@/components/ui";
 import { useStore } from "@/lib/store";
 
@@ -93,7 +93,7 @@ export default function VotingPage() {
                 Options
               </label>
               {options.map((opt, i) => (
-                <div key={i} className="flex items-center gap-2">
+                <div key={i} className="flex items-end gap-2">
                   <div className="flex-1">
                     <TextInput
                       label={`Option ${i + 1}`}
@@ -107,7 +107,8 @@ export default function VotingPage() {
                     <button
                       type="button"
                       onClick={() => handleRemoveOption(i)}
-                      className="mt-6 text-rose-500 hover:bg-rose-50 p-2 rounded"
+                      className="mb-0.5 grid h-11 w-11 shrink-0 place-items-center rounded text-rose-500 hover:bg-rose-50"
+                      aria-label={`Remove option ${i + 1}`}
                     >
                       <X className="h-4 w-4" />
                     </button>
@@ -123,7 +124,7 @@ export default function VotingPage() {
               </button>
             </div>
 
-            <div className="flex items-center gap-2 mt-4">
+            <div className="mt-4 flex flex-wrap items-center gap-2 [&>button]:w-full sm:[&>button]:w-auto">
               <IconButton icon={Save} label="Publish Poll" type="submit" />
               <IconButton
                 icon={X}
@@ -160,14 +161,14 @@ export default function VotingPage() {
 
               return (
                 <div key={poll.id} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-                  <div className="flex justify-between items-start mb-4">
-                    <h3 className="font-semibold text-lg text-slate-900 leading-tight">
+                  <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <h3 className="break-words text-lg font-semibold leading-tight text-slate-900">
                       {poll.question}
                     </h3>
-                    <div className="flex flex-col items-end gap-1">
+                    <div className="flex flex-col items-start gap-1 sm:items-end">
                       <Badge tone="emerald">Open</Badge>
                       {poll.deadline && (
-                        <span className="text-[10px] text-slate-500">
+                        <span className="text-xs text-slate-500 sm:text-[10px]">
                           Ends: {new Date(poll.deadline).toLocaleString()}
                         </span>
                       )}
@@ -191,8 +192,8 @@ export default function VotingPage() {
                             return (
                               <div key={opt.id} className="space-y-1">
                                 <div className="flex justify-between text-sm">
-                                  <span className="font-medium text-slate-700">{opt.text}</span>
-                                  <span className="text-slate-500">{opt.voteCount} ({percent}%)</span>
+                                  <span className="break-words font-medium text-slate-700">{opt.text}</span>
+                                  <span className="shrink-0 text-slate-500">{opt.voteCount} ({percent}%)</span>
                                 </div>
                                 <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
                                   <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${percent}%` }} />
@@ -209,19 +210,19 @@ export default function VotingPage() {
                   ) : (
                     <div className="space-y-3">
                       {pollOpts.map((opt) => (
-                        <label key={opt.id} className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                        <label key={opt.id} className="flex cursor-pointer items-start gap-3 rounded-lg border border-slate-200 p-3 hover:bg-slate-50">
                           <input
                             type="radio"
                             name={`poll-${poll.id}`}
                             value={opt.id}
                             checked={selectedOptions[poll.id] === opt.id}
                             onChange={(e) => setSelectedOptions({ ...selectedOptions, [poll.id]: e.target.value })}
-                            className="w-4 h-4 text-indigo-600 border-slate-300 focus:ring-indigo-600"
+                            className="mt-0.5 h-4 w-4 shrink-0 border-slate-300 text-indigo-600 focus:ring-indigo-600"
                           />
-                          <span className="text-sm font-medium text-slate-700">{opt.text}</span>
+                          <span className="break-words text-sm font-medium text-slate-700">{opt.text}</span>
                         </label>
                       ))}
-                      <div className="pt-2">
+                      <div className="pt-2 [&>button]:w-full sm:[&>button]:w-auto">
                         <IconButton
                           icon={Vote}
                           label="Cast Vote"
@@ -233,7 +234,7 @@ export default function VotingPage() {
                   )}
 
                   {isAdmin && (
-                    <div className="mt-6 pt-4 border-t border-slate-100 flex justify-end gap-2">
+                    <div className="mt-6 flex flex-wrap justify-end gap-2 border-t border-slate-100 pt-4">
                       <button
                         onClick={() => closePoll(poll.id)}
                         className="text-xs font-medium text-slate-500 hover:text-slate-700 px-3 py-1.5 rounded bg-slate-100 hover:bg-slate-200"
@@ -264,8 +265,8 @@ export default function VotingPage() {
 
               return (
                 <div key={poll.id} className="rounded-xl border border-slate-200 bg-slate-50/50 p-5">
-                  <div className="flex justify-between items-start mb-4">
-                    <h3 className="font-semibold text-slate-700 leading-tight">
+                  <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <h3 className="break-words font-semibold leading-tight text-slate-700">
                       {poll.question}
                     </h3>
                     <Badge tone="slate">Closed</Badge>
@@ -277,8 +278,8 @@ export default function VotingPage() {
                       return (
                         <div key={opt.id} className="space-y-1">
                           <div className="flex justify-between text-sm">
-                            <span className="font-medium text-slate-600">{opt.text}</span>
-                            <span className="text-slate-500">{opt.voteCount} ({percent}%)</span>
+                            <span className="break-words font-medium text-slate-600">{opt.text}</span>
+                            <span className="shrink-0 text-slate-500">{opt.voteCount} ({percent}%)</span>
                           </div>
                           <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
                             <div className="h-full bg-slate-400 rounded-full" style={{ width: `${percent}%` }} />
@@ -321,7 +322,7 @@ export default function VotingPage() {
             <p className="text-sm text-slate-600">
               Are you sure you want to delete this poll? All votes will be permanently removed.
             </p>
-            <div className="mt-6 flex justify-end gap-3">
+            <div className="mt-6 flex flex-wrap justify-end gap-3 [&>button]:flex-1 sm:[&>button]:flex-none">
               <button
                 type="button"
                 className="rounded-md px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"

@@ -13,7 +13,6 @@ import {
   TextInput,
 } from "@/components/ui";
 import {
-  currentPeriod,
   formatMoney,
   groupContributionsByPeriod,
 } from "@/lib/finance";
@@ -105,7 +104,7 @@ export default function ContributionsPage() {
               <option value="Bank">Bank</option>
               <option value="Mobile Banking">Mobile Banking</option>
             </SelectInput>
-            <div className="flex items-end">
+            <div className="flex items-end [&>button]:w-full lg:[&>button]:w-auto">
               <IconButton icon={Plus} label="Auto Allocate" type="submit" />
             </div>
           </form>
@@ -113,7 +112,60 @@ export default function ContributionsPage() {
       ) : null}
 
       <Section title="Contribution Periods">
-        <TableShell>
+        <div className="grid gap-3 sm:hidden">
+          {periods.map((item) => (
+            <article
+              key={item.key}
+              className="rounded-lg border border-slate-200 bg-slate-50 p-3"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <h3 className="font-semibold text-slate-950">{item.label}</h3>
+                  <p className="mt-1 text-sm text-slate-600">
+                    Collected {formatMoney(item.collected)}
+                  </p>
+                </div>
+                <Link
+                  href={`/contributions/${item.key}`}
+                  className="inline-flex h-10 shrink-0 items-center gap-2 rounded-md border border-slate-300 bg-white px-3 text-sm font-medium text-slate-700"
+                >
+                  <Eye className="h-4 w-4" aria-hidden="true" />
+                  Open
+                </Link>
+              </div>
+              <dl className="mt-3 grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <dt className="text-slate-500">Expected</dt>
+                  <dd className="mt-1 font-medium">
+                    {formatMoney(item.expected)}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-slate-500">Paid</dt>
+                  <dd className="mt-1">
+                    <Badge tone="emerald">{item.paid}</Badge>
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-slate-500">Partial</dt>
+                  <dd className="mt-1">
+                    <Badge tone="amber">{item.partial}</Badge>
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-slate-500">Unpaid</dt>
+                  <dd className="mt-1">
+                    <Badge tone={item.unpaid > 0 ? "rose" : "slate"}>
+                      {item.unpaid}
+                    </Badge>
+                  </dd>
+                </div>
+              </dl>
+            </article>
+          ))}
+        </div>
+
+        <TableShell className="hidden sm:block">
           <table className="w-full min-w-[820px] text-left text-sm">
             <thead className="border-b border-slate-200 text-xs uppercase text-slate-500">
               <tr>

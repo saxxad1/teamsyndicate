@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Edit3, Plus, Save, Trash2, X } from "lucide-react";
+import { Edit3, Plus, Trash2, X } from "lucide-react";
 import {
   Badge,
   IconButton,
@@ -147,9 +147,9 @@ export default function TransactionsPage() {
       />
 
       {isAdmin && isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/50 p-4">
-          <div className="w-full max-w-4xl rounded-xl bg-white shadow-xl">
-            <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+        <div className="fixed inset-0 z-50 flex items-end justify-center overflow-y-auto bg-slate-950/50 p-3 sm:items-center sm:p-4">
+          <div className="max-h-[calc(100dvh-1.5rem)] w-full max-w-4xl overflow-y-auto rounded-xl bg-white shadow-xl">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-4 sm:px-6">
               <h2 className="text-lg font-semibold text-slate-900">
                 {editingId ? "Edit Transaction" : "Add Transaction"}
               </h2>
@@ -165,7 +165,7 @@ export default function TransactionsPage() {
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <form className="grid gap-4 p-6 lg:grid-cols-6" onSubmit={submit}>
+            <form className="grid gap-4 p-4 sm:p-6 lg:grid-cols-6" onSubmit={submit}>
             <div className="lg:col-span-2">
               <SelectInput
                 label="Type"
@@ -258,7 +258,7 @@ export default function TransactionsPage() {
                 }
               />
             </div>
-                <div className="flex items-end justify-end gap-2 lg:col-span-6 mt-4 border-t border-slate-100 pt-6">
+                <div className="mt-4 flex flex-wrap items-end justify-end gap-2 border-t border-slate-100 pt-6 lg:col-span-6 [&>button]:w-full sm:[&>button]:w-auto">
                   <IconButton
                     icon={X}
                     label="Cancel"
@@ -344,7 +344,74 @@ export default function TransactionsPage() {
       </Section>
 
       <Section title="Transaction History">
-        <TableShell>
+        <div className="grid gap-3 md:hidden">
+          {transactions.map((transaction) => (
+            <article
+              key={transaction.id}
+              className="rounded-lg border border-slate-200 bg-slate-50 p-3"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <h3 className="font-semibold text-slate-950">
+                    {transaction.type}
+                  </h3>
+                  <p className="mt-1 text-sm text-slate-600">
+                    {memberName(state.members, transaction.memberId)}
+                  </p>
+                </div>
+                <p className="shrink-0 font-semibold">
+                  {formatMoney(transaction.amount)}
+                </p>
+              </div>
+              <dl className="mt-3 grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <dt className="text-slate-500">Date</dt>
+                  <dd className="mt-1 font-medium">
+                    {formatDate(transaction.date)}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-slate-500">Project</dt>
+                  <dd className="mt-1 font-medium">
+                    {projectName(state.projects, transaction.projectId)}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-slate-500">Method</dt>
+                  <dd className="mt-1 font-medium">
+                    {transaction.paymentMethod ?? "-"}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-slate-500">Source</dt>
+                  <dd className="mt-1">
+                    <Badge tone={transaction.source === "auto" ? "sky" : "slate"}>
+                      {transaction.source}
+                    </Badge>
+                  </dd>
+                </div>
+              </dl>
+              {isAdmin ? (
+                <div className="mt-4 flex flex-wrap justify-end gap-2 border-t border-slate-200 pt-3 [&>button]:flex-1">
+                  <IconButton
+                    icon={Edit3}
+                    label="Edit"
+                    variant="secondary"
+                    onClick={() => startEdit(transaction)}
+                  />
+                  <IconButton
+                    icon={Trash2}
+                    label="Delete"
+                    variant="danger"
+                    onClick={() => setDeleteModalId(transaction.id)}
+                  />
+                </div>
+              ) : null}
+            </article>
+          ))}
+        </div>
+
+        <TableShell className="hidden md:block">
           <table className="w-full min-w-[1040px] text-left text-sm">
             <thead className="border-b border-slate-200 text-xs uppercase text-slate-500">
               <tr>
@@ -425,7 +492,7 @@ export default function TransactionsPage() {
             <p className="text-sm text-slate-600">
               Are you sure you want to delete this transaction? This action cannot be undone.
             </p>
-            <div className="mt-6 flex justify-end gap-3">
+            <div className="mt-6 flex flex-wrap justify-end gap-3 [&>button]:flex-1 sm:[&>button]:flex-none">
               <button
                 type="button"
                 className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition"

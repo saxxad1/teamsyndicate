@@ -1,10 +1,7 @@
 "use client";
 
 import {
-  BarChart3,
   Banknote,
-  BriefcaseBusiness,
-  CircleDollarSign,
   TrendingDown,
   TrendingUp,
 } from "lucide-react";

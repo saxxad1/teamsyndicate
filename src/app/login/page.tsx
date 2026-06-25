@@ -34,8 +34,8 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-white px-4 py-8">
-      <div className="flex w-full max-w-md flex-col items-center gap-6">
+    <main className="flex min-h-screen items-center justify-center overflow-x-hidden bg-white px-4 py-8">
+      <div className="flex min-w-0 w-full max-w-sm flex-col items-center gap-6 sm:max-w-md">
         <Image
           src="/team-syndicate-logo.jpg"
           alt="Team Syndicate"
@@ -45,7 +45,7 @@ export default function LoginPage() {
           className="h-auto w-56 object-contain sm:w-72"
         />
 
-        <section className="w-full rounded-lg border border-slate-200 bg-white p-5 text-slate-950 shadow-lg">
+        <section className="w-full max-w-full rounded-lg border border-slate-200 bg-white p-5 text-slate-950 shadow-lg">
           <form className="space-y-4" onSubmit={submit}>
             <TextInput
               label="Email"

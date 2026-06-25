@@ -15,7 +15,7 @@ import {
 import { useStore } from "@/lib/store";
 
 export default function DashboardPage() {
-  const { state, summary, currentUser, isAdmin } = useStore();
+  const { state, summary, currentUser } = useStore();
   const period = currentPeriod();
 
   const membersWithDues = state.members
@@ -126,7 +126,33 @@ export default function DashboardPage() {
             ) : null
           }
         >
-          <TableShell>
+          <div className="grid gap-3 sm:hidden">
+            {recentTransactions(state.transactions, 10).map((transaction) => (
+              <article
+                key={transaction.id}
+                className="rounded-lg border border-slate-200 bg-slate-50 p-3"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-medium text-slate-950">
+                      {transaction.type}
+                    </p>
+                    <p className="mt-1 text-sm text-slate-600">
+                      {memberName(state.members, transaction.memberId)}
+                    </p>
+                  </div>
+                  <p className="shrink-0 font-semibold text-slate-950">
+                    {formatMoney(transaction.amount)}
+                  </p>
+                </div>
+                <p className="mt-2 text-xs text-slate-500">
+                  {formatDate(transaction.date)}
+                </p>
+              </article>
+            ))}
+          </div>
+
+          <TableShell className="hidden sm:block">
             <table className="w-full min-w-[640px] text-left text-sm">
               <thead className="border-b border-slate-200 text-xs uppercase text-slate-500">
                 <tr>

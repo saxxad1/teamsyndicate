@@ -9,11 +9,10 @@ import {
   IconButton,
   PageHeader,
   Section,
-  SelectInput,
   TextArea,
   TextInput,
 } from "@/components/ui";
-import { formatDate, formatMoney, projectFinancials } from "@/lib/finance";
+import { formatDate, formatMoney } from "@/lib/finance";
 import { useStore } from "@/lib/store";
 import type { ProjectStatus } from "@/lib/types";
 import { today } from "@/lib/utils";
@@ -55,8 +54,6 @@ export default function ProjectsPage() {
     return state.projects.filter((project) => project.status === status);
   }, [state.projects, status]);
 
-  const financials = projectFinancials(form);
-
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     addProject({
@@ -84,9 +81,9 @@ export default function ProjectsPage() {
       />
 
       {isAdmin && isModalOpen ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/50 p-4">
-          <div className="w-full max-w-2xl rounded-xl bg-white shadow-xl">
-            <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+        <div className="fixed inset-0 z-50 flex items-end justify-center overflow-y-auto bg-slate-950/50 p-3 sm:items-center sm:p-4">
+          <div className="max-h-[calc(100dvh-1.5rem)] w-full max-w-2xl overflow-y-auto rounded-xl bg-white shadow-xl">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-4 sm:px-6">
               <h2 className="text-lg font-semibold text-slate-900">
                 Add Project
               </h2>
@@ -107,7 +104,7 @@ export default function ProjectsPage() {
                 </svg>
               </button>
             </div>
-            <form className="grid gap-4 p-6 lg:grid-cols-6" onSubmit={submit}>
+            <form className="grid gap-4 p-4 sm:p-6 lg:grid-cols-6" onSubmit={submit}>
               <div className="lg:col-span-2">
                 <TextInput
                   label="Project name"
@@ -150,7 +147,7 @@ export default function ProjectsPage() {
                   }
                 />
               </div>
-              <div className="flex justify-end gap-3 lg:col-span-6">
+              <div className="flex flex-wrap justify-end gap-3 lg:col-span-6 [&>button]:w-full sm:[&>button]:w-auto">
                 <IconButton
                   icon={Plus}
                   label="Cancel"
@@ -168,7 +165,7 @@ export default function ProjectsPage() {
       <Section
         title="Project List"
         action={
-          <div className="inline-flex rounded-md border border-slate-300 bg-white p-1">
+          <div className="grid w-full grid-cols-3 rounded-md border border-slate-300 bg-white p-1 sm:inline-flex sm:w-auto">
             {(["all", "running", "closed"] as const).map((item) => (
               <button
                 key={item}
@@ -200,7 +197,7 @@ export default function ProjectsPage() {
                     <h2 className="font-semibold text-slate-950">
                       {project.name}
                     </h2>
-                    <p className="mt-1 line-clamp-2 text-sm text-slate-500">
+                    <p className="mt-1 line-clamp-2 break-words text-sm text-slate-500">
                       {project.description || "No description"}
                     </p>
                   </div>
@@ -229,7 +226,7 @@ export default function ProjectsPage() {
                     </dd>
                   </div>
                 </dl>
-                <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-4 text-sm text-slate-500">
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4 text-sm text-slate-500">
                   <span>{formatDate(project.startDate)}</span>
                   <Link
                     href={`/projects/${project.id}`}

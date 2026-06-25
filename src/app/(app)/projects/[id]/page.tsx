@@ -235,7 +235,7 @@ function ProjectDetailsContent({
                   }
                 />
               </div>
-              <div className="flex flex-wrap gap-2 sm:col-span-2">
+              <div className="flex flex-wrap gap-2 sm:col-span-2 [&>button]:w-full sm:[&>button]:w-auto">
                 <IconButton icon={Save} label="Save" type="submit" />
                 <IconButton
                   icon={Trash2}
@@ -306,34 +306,62 @@ function ProjectDetailsContent({
         {transactions.length === 0 ? (
           <EmptyState title="No project transactions found." />
         ) : (
-          <TableShell>
-            <table className="w-full min-w-[720px] text-left text-sm">
-              <thead className="border-b border-slate-200 text-xs uppercase text-slate-500">
-                <tr>
-                  <th className="py-3 pr-3 font-medium">Date</th>
-                  <th className="py-3 pr-3 font-medium">Type</th>
-                  <th className="py-3 pr-3 font-medium">Source</th>
-                  <th className="py-3 text-right font-medium">Amount</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {transactions.map((transaction) => (
-                  <tr key={transaction.id}>
-                    <td className="py-3 pr-3">{formatDate(transaction.date)}</td>
-                    <td className="py-3 pr-3 font-medium">
-                      {transaction.type}
-                    </td>
-                    <td className="py-3 pr-3 capitalize text-slate-500">
-                      {transaction.source}
-                    </td>
-                    <td className="py-3 text-right font-semibold">
+          <>
+            <div className="grid gap-3 sm:hidden">
+              {transactions.map((transaction) => (
+                <article
+                  key={transaction.id}
+                  className="rounded-lg border border-slate-200 bg-slate-50 p-3"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <h3 className="font-medium text-slate-950">
+                        {transaction.type}
+                      </h3>
+                      <p className="mt-1 text-sm capitalize text-slate-500">
+                        {transaction.source}
+                      </p>
+                    </div>
+                    <p className="shrink-0 font-semibold">
                       {formatMoney(transaction.amount)}
-                    </td>
+                    </p>
+                  </div>
+                  <p className="mt-2 text-xs text-slate-500">
+                    {formatDate(transaction.date)}
+                  </p>
+                </article>
+              ))}
+            </div>
+
+            <TableShell className="hidden sm:block">
+              <table className="w-full min-w-[720px] text-left text-sm">
+                <thead className="border-b border-slate-200 text-xs uppercase text-slate-500">
+                  <tr>
+                    <th className="py-3 pr-3 font-medium">Date</th>
+                    <th className="py-3 pr-3 font-medium">Type</th>
+                    <th className="py-3 pr-3 font-medium">Source</th>
+                    <th className="py-3 text-right font-medium">Amount</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </TableShell>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {transactions.map((transaction) => (
+                    <tr key={transaction.id}>
+                      <td className="py-3 pr-3">{formatDate(transaction.date)}</td>
+                      <td className="py-3 pr-3 font-medium">
+                        {transaction.type}
+                      </td>
+                      <td className="py-3 pr-3 capitalize text-slate-500">
+                        {transaction.source}
+                      </td>
+                      <td className="py-3 text-right font-semibold">
+                        {formatMoney(transaction.amount)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </TableShell>
+          </>
         )}
       </Section>
     </>

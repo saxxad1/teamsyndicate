@@ -43,7 +43,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       { label: "Reports", href: "/reports", icon: BarChart3 },
       { label: "Voting", href: "/voting", icon: Vote },
     ];
-  }, [currentUser]);
+  }, []);
 
   const blocked =
     currentUser?.role === "member" &&
@@ -65,7 +65,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-slate-50">
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 w-72 border-r border-slate-800 bg-slate-950 text-white transition-transform lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-40 w-[min(18rem,calc(100vw-1.25rem))] border-r border-slate-800 bg-slate-950 text-white transition-transform lg:w-72 lg:translate-x-0",
           menuOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
@@ -97,7 +97,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </button>
         </div>
 
-        <nav className="space-y-1 px-3 py-4">
+        <nav className="max-h-[calc(100dvh-6rem)] space-y-1 overflow-y-auto px-3 py-4">
           {navItems.map((item) => {
             const Icon = item.icon;
             const active =
@@ -132,8 +132,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       ) : null}
 
       <div className="lg:pl-72">
-        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-slate-200 bg-white/95 px-4 backdrop-blur md:px-6">
-          <div className="flex items-center gap-3">
+        <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-3 border-b border-slate-200 bg-white/95 px-3 backdrop-blur sm:px-4 md:px-6">
+          <div className="flex min-w-0 items-center gap-3">
             <button
               type="button"
               className="grid h-10 w-10 place-items-center rounded-md border border-slate-300 bg-white text-slate-800 lg:hidden"
@@ -142,8 +142,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             >
               <Menu className="h-5 w-5" />
             </button>
-            <div>
-              <p className="text-sm font-semibold text-slate-950">
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold text-slate-950">
                 {currentUser.name}
               </p>
               <p className="text-xs capitalize text-slate-500">
@@ -159,7 +159,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           />
         </header>
 
-        <main className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-6 md:px-6">
+        <main className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-3 py-4 sm:px-4 sm:py-6 md:gap-6 md:px-6">
           {children}
         </main>
       </div>

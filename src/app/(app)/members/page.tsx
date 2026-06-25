@@ -203,7 +203,7 @@ export default function MembersPage() {
               }
             />
           </div>
-          <div className="flex items-end gap-2 lg:col-span-6">
+          <div className="flex flex-wrap items-end gap-2 lg:col-span-6 [&>button]:w-full sm:[&>button]:w-auto">
             <IconButton icon={Plus} label="Add" type="submit" />
             <IconButton
               icon={X}
@@ -258,7 +258,7 @@ export default function MembersPage() {
                           <h2 className="font-semibold text-slate-950">
                             {member.name}
                           </h2>
-                          <p className="mt-0.5 text-sm text-slate-500">
+                          <p className="mt-0.5 break-all text-sm text-slate-500">
                             {member.email}
                           </p>
                         </div>
@@ -298,7 +298,7 @@ export default function MembersPage() {
                     </dl>
                   </div>
 
-                  <div className="mt-6 flex items-center justify-end gap-2 border-t border-slate-100 pt-4 text-sm text-slate-500">
+                  <div className="mt-6 flex flex-wrap items-center justify-end gap-2 border-t border-slate-100 pt-4 text-sm text-slate-500 [&>a]:flex-1 [&>button]:flex-1 sm:[&>a]:flex-none sm:[&>button]:flex-none">
                     <Link
                       href={`/members/${member.id}`}
                       className="inline-flex h-9 items-center gap-2 rounded-md border border-slate-300 px-3 font-medium text-slate-700 hover:bg-slate-50"

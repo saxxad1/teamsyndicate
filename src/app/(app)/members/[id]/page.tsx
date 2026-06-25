@@ -107,7 +107,7 @@ export default function MemberDetailsPage() {
         title={member.name}
         description={`${member.memberCode ?? "No ID"} | ${member.email} | ${member.phone}`}
         action={
-          <div className="flex gap-2">
+          <div className="flex w-full flex-wrap gap-2 md:w-auto [&>a]:flex-1 [&>button]:flex-1 md:[&>a]:flex-none md:[&>button]:flex-none">
             {canEditProfile && !isEditing ? (
               <IconButton
                 icon={Edit3}
@@ -316,7 +316,7 @@ export default function MemberDetailsPage() {
                   }
                 />
               </div>
-              <div className="flex items-center gap-2 pt-2 sm:col-span-2">
+              <div className="flex flex-wrap items-center gap-2 pt-2 sm:col-span-2 [&>button]:w-full sm:[&>button]:w-auto">
                 <IconButton icon={Save} label="Save Changes" type="submit" />
                 <IconButton
                   icon={X}
@@ -398,56 +398,111 @@ export default function MemberDetailsPage() {
           {records.length === 0 ? (
             <EmptyState title="No contribution records found." />
           ) : (
-            <TableShell>
-              <table className="w-full min-w-[700px] text-left text-sm">
-                <thead className="border-b border-slate-200 text-xs uppercase text-slate-500">
-                  <tr>
-                    <th className="py-3 pr-3 font-medium">Month</th>
-                    <th className="py-3 pr-3 font-medium">Status</th>
-                    <th className="py-3 pr-3 text-right font-medium">
-                      Expected
-                    </th>
-                    <th className="py-3 pr-3 text-right font-medium">Paid</th>
-                    <th className="py-3 pr-3 text-right font-medium">Due</th>
-                    <th className="py-3 font-medium">Paid date</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {records.map((record) => (
-                    <tr key={record.id}>
-                      <td className="py-3 pr-3 font-medium text-slate-950">
-                        {periodLabel(record.year, record.month)}
-                      </td>
-                      <td className="py-3 pr-3">
-                        <Badge
-                          tone={
-                            record.status === "paid"
-                              ? "emerald"
-                              : record.status === "partial"
-                                ? "amber"
-                                : "rose"
-                          }
-                        >
-                          {record.status}
-                        </Badge>
-                      </td>
-                      <td className="py-3 pr-3 text-right">
-                        {formatMoney(record.amount)}
-                      </td>
-                      <td className="py-3 pr-3 text-right font-medium">
-                        {formatMoney(record.paidAmount)}
-                      </td>
-                      <td className="py-3 pr-3 text-right text-rose-700">
-                        {formatMoney(
-                          Math.max(record.amount - record.paidAmount, 0),
-                        )}
-                      </td>
-                      <td className="py-3">{formatDate(record.paidDate)}</td>
+            <>
+              <div className="grid gap-3 sm:hidden">
+                {records.map((record) => (
+                  <article
+                    key={record.id}
+                    className="rounded-lg border border-slate-200 bg-slate-50 p-3"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <h3 className="font-semibold text-slate-950">
+                          {periodLabel(record.year, record.month)}
+                        </h3>
+                        <p className="mt-1 text-sm text-slate-500">
+                          Paid date: {formatDate(record.paidDate)}
+                        </p>
+                      </div>
+                      <Badge
+                        tone={
+                          record.status === "paid"
+                            ? "emerald"
+                            : record.status === "partial"
+                              ? "amber"
+                              : "rose"
+                        }
+                      >
+                        {record.status}
+                      </Badge>
+                    </div>
+                    <dl className="mt-3 grid grid-cols-3 gap-2 text-sm">
+                      <div>
+                        <dt className="text-slate-500">Expected</dt>
+                        <dd className="mt-1 font-medium">
+                          {formatMoney(record.amount)}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-500">Paid</dt>
+                        <dd className="mt-1 font-medium text-emerald-700">
+                          {formatMoney(record.paidAmount)}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-500">Due</dt>
+                        <dd className="mt-1 font-medium text-rose-700">
+                          {formatMoney(
+                            Math.max(record.amount - record.paidAmount, 0),
+                          )}
+                        </dd>
+                      </div>
+                    </dl>
+                  </article>
+                ))}
+              </div>
+
+              <TableShell className="hidden sm:block">
+                <table className="w-full min-w-[700px] text-left text-sm">
+                  <thead className="border-b border-slate-200 text-xs uppercase text-slate-500">
+                    <tr>
+                      <th className="py-3 pr-3 font-medium">Month</th>
+                      <th className="py-3 pr-3 font-medium">Status</th>
+                      <th className="py-3 pr-3 text-right font-medium">
+                        Expected
+                      </th>
+                      <th className="py-3 pr-3 text-right font-medium">Paid</th>
+                      <th className="py-3 pr-3 text-right font-medium">Due</th>
+                      <th className="py-3 font-medium">Paid date</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </TableShell>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {records.map((record) => (
+                      <tr key={record.id}>
+                        <td className="py-3 pr-3 font-medium text-slate-950">
+                          {periodLabel(record.year, record.month)}
+                        </td>
+                        <td className="py-3 pr-3">
+                          <Badge
+                            tone={
+                              record.status === "paid"
+                                ? "emerald"
+                                : record.status === "partial"
+                                  ? "amber"
+                                  : "rose"
+                            }
+                          >
+                            {record.status}
+                          </Badge>
+                        </td>
+                        <td className="py-3 pr-3 text-right">
+                          {formatMoney(record.amount)}
+                        </td>
+                        <td className="py-3 pr-3 text-right font-medium">
+                          {formatMoney(record.paidAmount)}
+                        </td>
+                        <td className="py-3 pr-3 text-right text-rose-700">
+                          {formatMoney(
+                            Math.max(record.amount - record.paidAmount, 0),
+                          )}
+                        </td>
+                        <td className="py-3">{formatDate(record.paidDate)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </TableShell>
+            </>
           )}
         </Section>
       </div>
