@@ -84,7 +84,7 @@ export default function ReportsPage() {
       <div className="grid gap-4 xl:grid-cols-2">
         <Section title="Monthly Collection Report">
           <TableShell>
-            <table className="w-full min-w-[640px] text-left text-sm">
+            <table className="w-full min-w-[400px] text-left text-sm">
               <thead className="border-b border-slate-200 text-xs uppercase text-slate-500">
                 <tr>
                   <th className="py-3 pr-3 font-medium">Month</th>
@@ -121,7 +121,7 @@ export default function ReportsPage() {
 
         <Section title={isAdmin ? "Member-wise Payment Report" : "My Payment Report"}>
           <TableShell>
-            <table className="w-full min-w-[680px] text-left text-sm">
+            <table className="w-full min-w-[400px] text-left text-sm">
               <thead className="border-b border-slate-200 text-xs uppercase text-slate-500">
                 <tr>
                   <th className="py-3 pr-3 font-medium">Member</th>
@@ -158,7 +158,7 @@ export default function ReportsPage() {
       {isAdmin ? (
         <Section title="Due Report">
           <TableShell>
-            <table className="w-full min-w-[700px] text-left text-sm">
+            <table className="w-full min-w-[400px] text-left text-sm">
               <thead className="border-b border-slate-200 text-xs uppercase text-slate-500">
                 <tr>
                   <th className="py-3 pr-3 font-medium">Member</th>
@@ -198,7 +198,7 @@ export default function ReportsPage() {
             <EmptyState title="No projects found." />
           ) : (
             <TableShell>
-              <table className="w-full min-w-[780px] text-left text-sm">
+              <table className="w-full min-w-[500px] text-left text-sm">
                 <thead className="border-b border-slate-200 text-xs uppercase text-slate-500">
                   <tr>
                     <th className="py-3 pr-3 font-medium">Project</th>
@@ -248,7 +248,7 @@ export default function ReportsPage() {
 
         <Section title="Yearly Report">
           <TableShell>
-            <table className="w-full min-w-[560px] text-left text-sm">
+            <table className="w-full min-w-[400px] text-left text-sm">
               <thead className="border-b border-slate-200 text-xs uppercase text-slate-500">
                 <tr>
                   <th className="py-3 pr-3 font-medium">Year</th>
