@@ -32,16 +32,10 @@ export default function ContributionDetailsPage() {
   const { year, month } = parsePeriodKey(params.period);
 
   const records = useMemo(() => {
-    const all = state.contributions.filter(
+    return state.contributions.filter(
       (record) => record.year === year && record.month === month,
     );
-
-    if (currentUser?.role === "member" && currentUser.memberId) {
-      return all.filter((record) => record.memberId === currentUser.memberId);
-    }
-
-    return all;
-  }, [currentUser, month, state.contributions, year]);
+  }, [month, state.contributions, year]);
 
   const expected = sum(records.map((record) => record.amount));
   const collected = sum(records.map((record) => record.paidAmount));

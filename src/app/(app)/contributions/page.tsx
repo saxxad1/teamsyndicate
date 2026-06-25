@@ -32,13 +32,8 @@ export default function ContributionsPage() {
   const [paymentNote, setPaymentNote] = useState("");
 
   const visibleContributions = useMemo(() => {
-    if (currentUser?.role === "member" && currentUser.memberId) {
-      return state.contributions.filter(
-        (record) => record.memberId === currentUser.memberId,
-      );
-    }
     return state.contributions;
-  }, [currentUser, state.contributions]);
+  }, [state.contributions]);
 
   const periods = groupContributionsByPeriod(visibleContributions);
 
