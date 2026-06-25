@@ -40,8 +40,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       { label: "Contributions", href: "/contributions", icon: ClipboardList },
       { label: "Projects", href: "/projects", icon: BriefcaseBusiness },
       { label: "Transactions", href: "/transactions", icon: ReceiptText },
-      { label: "Voting", href: "/voting", icon: Vote },
       { label: "Reports", href: "/reports", icon: BarChart3 },
+      { label: "Voting", href: "/voting", icon: Vote },
     ];
   }, [currentUser]);
 
