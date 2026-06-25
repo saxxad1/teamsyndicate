@@ -30,7 +30,7 @@ import { today } from "@/lib/utils";
 
 type TransactionForm = {
   type: TransactionType;
-  amount: number;
+  amount: number | "";
   date: string;
   memberId: string;
   projectId: string;
@@ -40,7 +40,7 @@ type TransactionForm = {
 
 const blankTransaction: TransactionForm = {
   type: "Other Income",
-  amount: 0,
+  amount: "",
   date: today(),
   memberId: "",
   projectId: "",
@@ -94,6 +94,7 @@ export default function TransactionsPage() {
 
     const payload = {
       ...form,
+      amount: Number(form.amount),
       memberId: form.memberId || undefined,
       projectId: form.projectId || undefined,
       createdBy: currentUser.id,
@@ -165,86 +166,98 @@ export default function TransactionsPage() {
               </button>
             </div>
             <form className="grid gap-4 p-6 lg:grid-cols-6" onSubmit={submit}>
-          <SelectInput
-            label="Type"
-            value={form.type}
-            onChange={(value) =>
-              setForm((item) => ({ ...item, type: value as TransactionType }))
-            }
-          >
-            {transactionTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </SelectInput>
-          <TextInput
-            label="Amount"
-            type="number"
-            value={form.amount}
-            onChange={(value) =>
-              setForm((item) => ({ ...item, amount: Number(value) }))
-            }
-          />
-          <TextInput
-            label="Date"
-            type="date"
-            value={form.date}
-            onChange={(value) => setForm((item) => ({ ...item, date: value }))}
-          />
-          <SelectInput
-            label="Related member"
-            value={form.memberId}
-            onChange={(value) =>
-              setForm((item) => ({ ...item, memberId: value }))
-            }
-          >
-            <option value="">None</option>
-            {state.members.map((member) => (
-              <option key={member.id} value={member.id}>
-                {member.name}
-              </option>
-            ))}
-          </SelectInput>
-          <SelectInput
-            label="Related project"
-            value={form.projectId}
-            onChange={(value) =>
-              setForm((item) => ({ ...item, projectId: value }))
-            }
-          >
-            <option value="">None</option>
-            {state.projects.map((project) => (
-              <option key={project.id} value={project.id}>
-                {project.name}
-              </option>
-            ))}
-          </SelectInput>
-          <SelectInput
-            label="Method"
-            value={form.paymentMethod}
-            onChange={(value) =>
-              setForm((item) => ({
-                ...item,
-                paymentMethod: value as PaymentMethod,
-              }))
-            }
-          >
-            {paymentMethods.map((method) => (
-              <option key={method} value={method}>
-                {method}
-              </option>
-            ))}
-          </SelectInput>
-          <div className="lg:col-span-4">
-            <TextArea
-              label="Note"
-              value={form.note}
-              onChange={(value) =>
-                setForm((item) => ({ ...item, note: value }))
-              }
-            />
-          </div>
+            <div className="lg:col-span-2">
+              <SelectInput
+                label="Type"
+                value={form.type}
+                onChange={(value) =>
+                  setForm((item) => ({ ...item, type: value as TransactionType }))
+                }
+              >
+                {transactionTypes.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </SelectInput>
+            </div>
+            <div className="lg:col-span-2">
+              <TextInput
+                label="Amount"
+                type="number"
+                value={form.amount}
+                onChange={(value) =>
+                  setForm((item) => ({ ...item, amount: value === "" ? "" : Number(value) }))
+                }
+              />
+            </div>
+            <div className="lg:col-span-2">
+              <TextInput
+                label="Date"
+                type="date"
+                value={form.date}
+                onChange={(value) => setForm((item) => ({ ...item, date: value }))}
+              />
+            </div>
+            <div className="lg:col-span-2">
+              <SelectInput
+                label="Related member"
+                value={form.memberId}
+                onChange={(value) =>
+                  setForm((item) => ({ ...item, memberId: value }))
+                }
+              >
+                <option value="">None</option>
+                {state.members.map((member) => (
+                  <option key={member.id} value={member.id}>
+                    {member.name}
+                  </option>
+                ))}
+              </SelectInput>
+            </div>
+            <div className="lg:col-span-2">
+              <SelectInput
+                label="Related project"
+                value={form.projectId}
+                onChange={(value) =>
+                  setForm((item) => ({ ...item, projectId: value }))
+                }
+              >
+                <option value="">None</option>
+                {state.projects.map((project) => (
+                  <option key={project.id} value={project.id}>
+                    {project.name}
+                  </option>
+                ))}
+              </SelectInput>
+            </div>
+            <div className="lg:col-span-2">
+              <SelectInput
+                label="Method"
+                value={form.paymentMethod}
+                onChange={(value) =>
+                  setForm((item) => ({
+                    ...item,
+                    paymentMethod: value as PaymentMethod,
+                  }))
+                }
+              >
+                {paymentMethods.map((method) => (
+                  <option key={method} value={method}>
+                    {method}
+                  </option>
+                ))}
+              </SelectInput>
+            </div>
+            <div className="lg:col-span-6">
+              <TextArea
+                label="Note"
+                value={form.note}
+                onChange={(value) =>
+                  setForm((item) => ({ ...item, note: value }))
+                }
+              />
+            </div>
                 <div className="flex items-end justify-end gap-2 lg:col-span-6 mt-4 border-t border-slate-100 pt-6">
                   <IconButton
                     icon={X}
