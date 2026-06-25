@@ -298,33 +298,6 @@ export default function ReportsPage() {
         </Section>
       </div>
 
-      <Section title="Fund Summary">
-        <div className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-md border border-slate-200 p-4">
-            <BarChart3 className="h-5 w-5 text-slate-500" />
-            <p className="mt-3 text-sm text-slate-500">Formula balance</p>
-            <p className="mt-1 text-xl font-semibold">
-              {formatMoney(summary.totalFundBalance)}
-            </p>
-          </div>
-          <div className="rounded-md border border-slate-200 p-4">
-            <BriefcaseBusiness className="h-5 w-5 text-slate-500" />
-            <p className="mt-3 text-sm text-slate-500">Invested / Expense</p>
-            <p className="mt-1 text-xl font-semibold">
-              {formatMoney(summary.totalInvestment)} /{" "}
-              {formatMoney(summary.totalProjectExpense)}
-            </p>
-          </div>
-          <div className="rounded-md border border-slate-200 p-4">
-            <Banknote className="h-5 w-5 text-slate-500" />
-            <p className="mt-3 text-sm text-slate-500">Other income / expense</p>
-            <p className="mt-1 text-xl font-semibold">
-              {formatMoney(summary.otherIncome)} /{" "}
-              {formatMoney(summary.otherExpense)}
-            </p>
-          </div>
-        </div>
-      </Section>
     </>
   );
 }
